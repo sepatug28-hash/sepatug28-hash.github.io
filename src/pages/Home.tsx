@@ -15,24 +15,38 @@ const Home = () => {
       category: "Living Room",
     },
     {
-      id: "2",
+      id: "16",
       name: "Dining Table Set",
       price: 1299,
       image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&q=80",
       category: "Dining",
     },
     {
-      id: "3",
+      id: "6",
       name: "Minimalist Bed Frame",
       price: 749,
       image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80",
       category: "Bedroom",
     },
     {
-      id: "4",
-      name: "Bookshelf",
-      price: 299,
-      image: "https://images.unsplash.com/photo-1594620302200-9a762244a156?w=800&q=80",
+      id: "12",
+      name: "Kitchen Island",
+      price: 1299,
+      image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80",
+      category: "Kitchen",
+    },
+    {
+      id: "26",
+      name: "Office Chair",
+      price: 449,
+      image: "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&q=80",
+      category: "Office",
+    },
+    {
+      id: "22",
+      name: "Storage Cabinet",
+      price: 549,
+      image: "https://images.unsplash.com/photo-1600585152915-d208bec867a1?w=800&q=80",
       category: "Storage",
     },
   ];
@@ -52,6 +66,21 @@ const Home = () => {
       name: "Kitchen",
       path: "/categories/kitchen",
       image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80",
+    },
+    {
+      name: "Dining",
+      path: "/categories/dining",
+      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&q=80",
+    },
+    {
+      name: "Storage",
+      path: "/categories/storage",
+      image: "https://images.unsplash.com/photo-1594620302200-9a762244a156?w=800&q=80",
+    },
+    {
+      name: "Office",
+      path: "/categories/office",
+      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
     },
   ];
 
@@ -97,12 +126,13 @@ const Home = () => {
               Find the perfect pieces for every space in your home
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category) => (
               <Link
                 key={category.path}
                 to={category.path}
                 className="group relative h-80 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+                data-testid={`category-link-${category.name.toLowerCase().replace(' ', '-')}`}
               >
                 <img
                   src={category.image}
@@ -130,7 +160,7 @@ const Home = () => {
               Handpicked favorites that bring style and comfort to your home
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
