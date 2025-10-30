@@ -1,33 +1,41 @@
-import { useParams } from "react-router-dom";
-import { Heart, ShoppingCart, Truck, Shield, RotateCcw } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Heart, ShoppingCart, Truck, Shield, RotateCcw, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getProductById } from "@/data/products";
+import { useCart } from "@/context/CartContext";
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
 
-  const product = {
-    id: id || "1",
-    name: "Modern Minimalist Sofa",
-    price: 899,
-    description: "Experience ultimate comfort with our modern minimalist sofa. Crafted with premium materials and Scandinavian design principles, this piece combines style and functionality.",
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80",
-    category: "Living Room",
-    inStock: true,
-    features: [
-      "Premium fabric upholstery",
-      "Solid wood frame",
-      "High-density foam cushions",
-      "Easy to clean and maintain",
-      "5-year warranty",
-    ],
-    dimensions: {
-      width: "220cm",
-      depth: "90cm",
-      height: "85cm",
-    },
+  const product = getProductById(id || "");
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-12">
+          <div className="text-center max-w-md mx-auto py-16">
+            <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
+            <p className="text-muted-foreground mb-8">
+              The product you're looking for doesn't exist.
+            </p>
+            <Button onClick={() => navigate("/products")} data-testid="button-back-to-products">
+              Back to Products
+            </Button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const handleAddToCart = () => {
+    addToCart(product);
   };
 
   return (
@@ -35,6 +43,16 @@ const ProductDetail = () => {
       <Header />
       
       <main className="flex-1 container mx-auto px-4 py-12">
+        <Button
+          variant="ghost"
+          className="mb-6 gap-2"
+          onClick={() => navigate(-1)}
+          data-testid="button-back"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+        
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Image */}
           <div className="space-y-4">
@@ -43,6 +61,7 @@ const ProductDetail = () => {
                 src={product.image}
                 alt={product.name}
                 className="w-full h-full object-cover"
+                data-testid="img-product"
               />
             </div>
           </div>
@@ -50,24 +69,29 @@ const ProductDetail = () => {
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-muted-foreground uppercase mb-2">
+              <p className="text-sm text-muted-foreground uppercase mb-2" data-testid="text-category">
                 {product.category}
               </p>
-              <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-              <p className="text-3xl font-bold text-primary mb-6">
+              <h1 className="text-4xl font-bold mb-4" data-testid="text-product-name">{product.name}</h1>
+              <p className="text-3xl font-bold text-primary mb-6" data-testid="text-price">
                 ${product.price.toFixed(2)}
               </p>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed" data-testid="text-description">
                 {product.description}
               </p>
             </div>
 
             <div className="flex gap-4">
-              <Button size="lg" className="flex-1 gap-2">
+              <Button
+                size="lg"
+                className="flex-1 gap-2"
+                onClick={handleAddToCart}
+                data-testid="button-add-to-cart"
+              >
                 <ShoppingCart className="h-5 w-5" />
                 Add to Cart
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" data-testid="button-favorite">
                 <Heart className="h-5 w-5" />
               </Button>
             </div>
@@ -118,8 +142,8 @@ const ProductDetail = () => {
                 </div>
               </TabsContent>
               <TabsContent value="care" className="mt-4">
-                <p className="text-muted-foreground">
-                  Clean with a soft, damp cloth. Avoid harsh chemicals. For deeper cleaning, use appropriate upholstery cleaner. Keep away from direct sunlight to prevent fading.
+                <p className="text-muted-foreground" data-testid="text-care">
+                  {product.care}
                 </p>
               </TabsContent>
             </Tabs>

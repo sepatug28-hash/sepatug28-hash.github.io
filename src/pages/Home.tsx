@@ -4,52 +4,13 @@ import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import { products, getProductById } from "@/data/products";
 
 const Home = () => {
-  const featuredProducts = [
-    {
-      id: "1",
-      name: "Modern Sofa",
-      price: 899,
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80",
-      category: "Living Room",
-    },
-    {
-      id: "16",
-      name: "Dining Table Set",
-      price: 1299,
-      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&q=80",
-      category: "Dining",
-    },
-    {
-      id: "6",
-      name: "Minimalist Bed Frame",
-      price: 749,
-      image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80",
-      category: "Bedroom",
-    },
-    {
-      id: "12",
-      name: "Kitchen Island",
-      price: 1299,
-      image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80",
-      category: "Kitchen",
-    },
-    {
-      id: "26",
-      name: "Office Chair",
-      price: 449,
-      image: "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&q=80",
-      category: "Office",
-    },
-    {
-      id: "22",
-      name: "Storage Cabinet",
-      price: 549,
-      image: "https://images.unsplash.com/photo-1600585152915-d208bec867a1?w=800&q=80",
-      category: "Storage",
-    },
-  ];
+  const featuredProductIds = ["1", "16", "6", "12", "26", "22"];
+  const featuredProducts = featuredProductIds
+    .map(id => getProductById(id))
+    .filter(Boolean) as typeof products;
 
   const categories = [
     {
@@ -162,7 +123,7 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
           <div className="text-center mt-12">

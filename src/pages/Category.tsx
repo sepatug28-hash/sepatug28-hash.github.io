@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import { getProductsByCategory } from "@/data/products";
 
 const Category = () => {
   const { category } = useParams();
@@ -15,8 +16,12 @@ const Category = () => {
     "office": "Office",
   };
 
-  const categoryProducts: Record<string, any[]> = {
+  const categoryName = categoryNames[category || ""] || "Category";
+  const products = getProductsByCategory(category || "all");
+
+  const oldCategoryProducts: Record<string, any[]> = {
     "living-room": [
+      // DEPRECATED - using data/products.ts now
       {
         id: "1",
         name: "Modern Sofa",
@@ -240,9 +245,6 @@ const Category = () => {
     ],
   };
 
-  const categoryName = categoryNames[category || ""] || "Category";
-  const products = categoryProducts[category || ""] || [];
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -270,7 +272,7 @@ const Category = () => {
           {products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {products.map((product) => (
-                <ProductCard key={product.id} {...product} />
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (

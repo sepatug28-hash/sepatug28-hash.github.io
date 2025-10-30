@@ -4,12 +4,17 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { products as allProducts } from "@/data/products";
 
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const products = [
-    // Living Room (5 items)
+  const filteredProducts = selectedCategory === "all" 
+    ? allProducts 
+    : allProducts.filter(p => p.category.toLowerCase().replace(" ", "-") === selectedCategory);
+
+  const oldProducts = [
+    // Living Room (5 items - DEPRECATED, using data/products.ts now)
     {
       id: "1",
       name: "Modern Sofa",
@@ -321,8 +326,8 @@ const Products = () => {
         {/* Products Grid */}
         <section className="container mx-auto px-4 pb-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <ProductCard key={product.id} {...product} />
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </section>

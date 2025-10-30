@@ -3,8 +3,12 @@ import { Search, ShoppingCart, Heart, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useCart } from "@/context/CartContext";
 
 const Header = () => {
+  const { getCartCount } = useCart();
+  const cartCount = getCartCount();
+  
   const navLinks = [
     { name: "Products", path: "/products" },
     { name: "Living Room", path: "/categories/living-room" },
@@ -66,12 +70,16 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="hidden md:flex">
               <Heart className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-accent text-accent-foreground text-xs flex items-center justify-center">
-                0
-              </span>
-            </Button>
+            <Link to="/cart">
+              <Button variant="ghost" size="icon" className="relative" data-testid="button-cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center" data-testid="text-cart-count">
+                    {cartCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
 
             {/* Mobile Menu */}
             <Sheet>
